@@ -30,6 +30,15 @@ except ImportError:
 AGENTBEATS_API_URL = "https://agentbeats.dev/api/agents"
 
 
+def normalize_image(image: str) -> str:
+    # If image already includes a registry, keep it
+    if image.startswith(("ghcr.io/", "docker.io/")):
+        return image
+
+    # Default all agent images to GHCR
+    return f"ghcr.io/codefusionagent/{image}"
+
+
 def fetch_agent_info(agentbeats_id: str) -> dict:
     """Fetch agent info from agentbeats.dev API."""
     url = f"{AGENTBEATS_API_URL}/{agentbeats_id}"
@@ -130,11 +139,19 @@ def resolve_image(agent: dict, name: str) -> None:
         print(f"Using {name} image: {agent['image']}")
     elif has_id:
         info = fetch_agent_info(agent["agentbeats_id"])
-        agent["image"] = info["docker_image"]
+        agent["image"] = normalize_image(info["docker_image"])
         print(f"Resolved {name} image: {agent['image']}")
     else:
         print(f"Error: {name} must have either 'image' or 'agentbeats_id' field")
         sys.exit(1)
+    if os.environ.get("GITHUB_ACTIONS"):
+        if not agent["image"].startswith("ghcr.io/"):
+            print(
+                f"Error: {name} image must be a fully qualified GHCR image in CI: "
+                f"{agent['image']}"
+            )
+            sys.exit(1)
+
 
 
 def parse_scenario(scenario_path: Path) -> dict[str, Any]:
