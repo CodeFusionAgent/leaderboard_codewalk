@@ -16,5 +16,5 @@ env = { GOOGLE_API_KEY = "${GOOGLE_API_KEY}", LOG_LEVEL = "INFO" }
 #image = "purple-agent:latest"
 
 [config]
-topic = "Should artificial intelligence be regulated ?"
+topic = "Should artificial intelligence be regulated by governments?"
 num_rounds = 1
