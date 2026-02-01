@@ -13,7 +13,7 @@ env = { QA_API_KEY = "${ANTHROPIC_API_KEY}", QA_DATA_DIR = "data", QA_MODEL = "c
 #image = "codewalk-qa-agent:latest"
 
 [config]
-question = "What is the internal implementation of BackgroundTasks? How does it relate to Starlette?"
-repo_url = "https://github.com/tiangolo/fastapi"
+question = "How does Django execute the matched view function and handle the view's response?"
+repo_url = "https://github.com/django/django"
 #judge_model = "gemini-2.5-flash"
 judge_model = "claude-sonnet-4-5"
